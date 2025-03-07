@@ -1,0 +1,69 @@
+#include <stdio.h>
+
+#define SIZE 10
+#define SHIP_SIZE 3
+
+void initializeBoard(int board[SIZE][SIZE]) {
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            board[i][j] = 0;
+        }
+    }
+}
+
+int isValidPosition(int board[SIZE][SIZE], int x, int y, int dx, int dy) {
+    for (int i = 0; i < SHIP_SIZE; i++) {
+        int nx = x + i * dx;
+        int ny = y + i * dy;
+        if (nx < 0 || nx >= SIZE || ny < 0 || ny >= SIZE || board[nx][ny] != 0) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+void placeShip(int board[SIZE][SIZE], int x, int y, int dx, int dy) {
+    for (int i = 0; i < SHIP_SIZE; i++) {
+        board[x + i * dx][y + i * dy] = 3;
+    }
+}
+
+void printBoard(int board[SIZE][SIZE]) {
+    printf("   A B C D E F G H I J\n");
+    for (int i = 0; i < SIZE; i++) {
+        printf("%2d ", i + 1);
+        for (int j = 0; j < SIZE; j++) {
+            printf("%d ", board[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int board[SIZE][SIZE];
+    initializeBoard(board);
+
+    // Colocar navio horizontal
+    if (isValidPosition(board, 0, 0, 0, 1)) {
+        placeShip(board, 0, 0, 0, 1);
+    }
+
+    // Colocar navio vertical
+    if (isValidPosition(board, 2, 2, 1, 0)) {
+        placeShip(board, 2, 2, 1, 0);
+    }
+
+    // Colocar navio diagonal (canto superior esquerdo para canto inferior direito)
+    if (isValidPosition(board, 4, 4, 1, 1)) {
+        placeShip(board, 4, 4, 1, 1);
+    }
+
+    // Colocar navio diagonal (canto superior direito para canto inferior esquerdo)
+    if (isValidPosition(board, 6, 9, 1, -1)) {
+        placeShip(board, 6, 9, 1, -1);
+    }
+
+    printBoard(board);
+
+    return 0;
+}
