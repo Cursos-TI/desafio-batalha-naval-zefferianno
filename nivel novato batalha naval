@@ -1,0 +1,53 @@
+#include <stdio.h>
+
+#define BOARD_SIZE 10
+#define SHIP_SIZE 3
+
+void initializeBoard(int board[BOARD_SIZE][BOARD_SIZE]) {
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            board[i][j] = 0;
+        }
+    }
+}
+
+void placeShip(int board[BOARD_SIZE][BOARD_SIZE], int startX, int startY, int isVertical) {
+    for (int i = 0; i < SHIP_SIZE; i++) {
+        if (isVertical) {
+            board[startX + i][startY] = 3;
+        } else {
+            board[startX][startY + i] = 3;
+        }
+    }
+}
+
+void printBoard(int board[BOARD_SIZE][BOARD_SIZE]) {
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            printf("%d ", board[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int board[BOARD_SIZE][BOARD_SIZE];
+
+    // Initialize the board with water (0)
+    initializeBoard(board);
+
+    // Place the vertical ship
+    int verticalShipStartX = 2;
+    int verticalShipStartY = 3;
+    placeShip(board, verticalShipStartX, verticalShipStartY, 1);
+
+    // Place the horizontal ship
+    int horizontalShipStartX = 5;
+    int horizontalShipStartY = 6;
+    placeShip(board, horizontalShipStartX, horizontalShipStartY, 0);
+
+    // Print the board
+    printBoard(board);
+
+    return 0;
+}
