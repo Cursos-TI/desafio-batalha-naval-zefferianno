@@ -1,0 +1,95 @@
+#include <stdio.h>
+
+#define SIZE 10
+#define HSIZE 5
+
+void printBoard(int board[SIZE][SIZE]) {
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            if (board[i][j] == 0) {
+                printf("0 ");
+            } else if (board[i][j] == 3) {
+                printf("3 ");
+            } else if (board[i][j] == 5) {
+                printf("5 ");
+            }
+        }
+        printf("\n");
+    }
+}
+
+void applySkill(int board[SIZE][SIZE], int skill[HSIZE][HSIZE], int originX, int originY) {
+    int offset = HSIZE / 2;
+    for (int i = 0; i < HSIZE; i++) {
+        for (int j = 0; j < HSIZE; j++) {
+            int x = originX + i - offset;
+            int y = originY + j - offset;
+            if (x >= 0 && x < SIZE && y >= 0 && y < SIZE && skill[i][j] == 1) {
+                board[x][y] = 5;
+            }
+        }
+    }
+}
+
+void createConeSkill(int skill[HSIZE][HSIZE]) {
+    for (int i = 0; i < HSIZE; i++) {
+        for (int j = 0; j < HSIZE; j++) {
+            if (j >= HSIZE / 2 - i && j <= HSIZE / 2 + i) {
+                skill[i][j] = 1;
+            } else {
+                skill[i][j] = 0;
+            }
+        }
+    }
+}
+
+void createCrossSkill(int skill[HSIZE][HSIZE]) {
+    for (int i = 0; i < HSIZE; i++) {
+        for (int j = 0; j < HSIZE; j++) {
+            if (i == HSIZE / 2 || j == HSIZE / 2) {
+                skill[i][j] = 1;
+            } else {
+                skill[i][j] = 0;
+            }
+        }
+    }
+}
+
+void createOctahedronSkill(int skill[HSIZE][HSIZE]) {
+    for (int i = 0; i < HSIZE; i++) {
+        for (int j = 0; j < HSIZE; j++) {
+            if (abs(i - HSIZE / 2) + abs(j - HSIZE / 2) <= HSIZE / 2) {
+                skill[i][j] = 1;
+            } else {
+                skill[i][j] = 0;
+            }
+        }
+    }
+}
+
+int main() {
+    int board[SIZE][SIZE] = {0};
+    int coneSkill[HSIZE][HSIZE];
+    int crossSkill[HSIZE][HSIZE];
+    int octahedronSkill[HSIZE][HSIZE];
+
+    // Example ships on the board
+    board[2][2] = 3;
+    board[2][3] = 3;
+    board[2][4] = 3;
+
+    // Create skills
+    createConeSkill(coneSkill);
+    createCrossSkill(crossSkill);
+    createOctahedronSkill(octahedronSkill);
+
+    // Apply skills to the board
+    applySkill(board, coneSkill, 2, 2);
+    applySkill(board, crossSkill, 5, 5);
+    applySkill(board, octahedronSkill, 7, 7);
+
+    // Print the board
+    printBoard(board);
+
+    return 0;
+}
